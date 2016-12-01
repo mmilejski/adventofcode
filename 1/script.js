@@ -8,12 +8,16 @@ var data = ["R5","L2","L1","R1","R3","R3","L3","R3","R4","L2","R4","L4","R4","R3
 
 var testData = ["L2", "L2", "L2", "L2", "L2"];
 
+var testDataForFirst = ["R8", "R4", "R4", "R8"];
+
 var facing = [1,0];
 var position = [0,0];
 
 function go(direction, pos, amount){
-  pos[0] += (direction[0] * amount);
-  pos[1] += (direction[1] * amount);
+  var newPos = [];
+  newPos[0] = pos[0] + (direction[0]);
+  newPos[1] = pos[1] + (direction[1]);
+  return newPos;
 }
 
 function turn(oldFacing, directionChar){
@@ -41,6 +45,9 @@ function turn(oldFacing, directionChar){
   return turns[turnIndex];
 }
 
+var firstVisitedTwice;
+var visitedLocations = {};
+
 data.forEach(function(step){
   direction = step[0];
   distance = step.substring(1);
@@ -49,11 +56,23 @@ data.forEach(function(step){
   console.log("Going " + step + " from " + position);
   facing = turn(facing, direction);
   console.log("Facing " + facing[2])
-  go(facing, position, distance);
-  console.log("I'm at " + position);
 
-  console.log("__________");
+  for(var i = 0; i < distance ; i++){
+    position = go(facing, position);
 
+    var locationKey = position[0] + "," + position[1];
+
+    if(!firstVisitedTwice && visitedLocations[locationKey]) {
+      console.log("!!!!!!!!!!!!!!! VISITED TWICE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+      firstVisitedTwice = [position[0], position[1]];
+    }
+
+    visitedLocations[locationKey] = 1;
+
+    console.log("Moving: " + position);
+  }
+  console.log("Arrived at: " + position);
 });
 
-console.log("I'm here: " + position);
+
+console.log("First location visited twice: " + firstVisitedTwice);
