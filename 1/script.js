@@ -1,4 +1,5 @@
-var data = ["R5","L2","L1","R1","R3","R3","L3","R3","R4","L2","R4","L4","R4","R3","L2","L1","L1","R2","R4","R4","L4","R3","L2","R1",
+var data = ["R5","L2","L1","R1","R3","R3","L3","R3","R4","L2","R4","L4","R4","R3","L2","L1","L1","R2","R4","R4","L4","R3","L2",
+"R1",
 "L4","R1","R3","L5","L4","L5","R3","L3","L1","L1","R4","R2","R2","L1","L4","R191","R5","L2","R46","R3","L1","R74","L2","R2","R187",
 "R3","R4","R1","L4","L4","L2","R4","L5","R4","R3","L2","L1","R3","R3","R3","R1","R1","L4","R4","R1","R5","R2","R1","R3","L4","L2",
 "L2","R1","L3","R1","R3","L5","L3","R5","R3","R4","L1","R3","R2","R1","R2","L4","L1","L1","R3","L3","R4","L2","L4","L5","L5","L4",
@@ -17,7 +18,7 @@ function go(direction, pos, amount){
 
 function turn(oldFacing, directionChar){
 
-  var turns = [[1,0],[0,1],[-1,0],[0,-1]];
+  var turns = [[1,0, "up"],[0,1,"right"],[-1,0,"down"],[0,-1,"left"]];
   var aroundDirection = directionChar==='R'?1:-1;
 
   var turnIndex = -1;
@@ -29,8 +30,10 @@ function turn(oldFacing, directionChar){
 
   if(turnIndex === 3 && directionChar === 'R'){
     turnIndex=0;
+    console.log("Turning right around");
   } else if(turnIndex === 0 && directionChar === 'L'){
     turnIndex=3;
+    console.log("Turning left around");
   } else{
     turnIndex=turnIndex+aroundDirection;
   }
@@ -38,15 +41,18 @@ function turn(oldFacing, directionChar){
   return turns[turnIndex];
 }
 
-testData.forEach(function(step){
+data.forEach(function(step){
   direction = step[0];
-  distance = step[1];
+  distance = step.substring(1);
 
+
+  console.log("Going " + step + " from " + position);
   facing = turn(facing, direction);
-
+  console.log("Facing " + facing[2])
   go(facing, position, distance);
+  console.log("I'm at " + position);
 
-  console.log("I went " + step + " and now I am at " + position);
+  console.log("__________");
 
 });
 
