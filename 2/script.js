@@ -1,7 +1,7 @@
 fs = require('fs')
 
 
-fs.readFile('test.dat', 'utf8', function (err,data) {
+fs.readFile('input.dat', 'utf8', function (err,data) {
   if (err) {
     console.log(err);
   }
@@ -12,10 +12,10 @@ fs.readFile('test.dat', 'utf8', function (err,data) {
 
 function findPincode(data){
   const moves = {
-    "U": [1,0],
-    "D": [-1, 0],
+    "D": [1,0],
+    "U": [-1, 0],
     "L": [0, -1],
-    "R": [1, 0]
+    "R": [0, 1]
   };
 
   const keys = [[1,2,3],[4,5,6],[7,8,9]];
@@ -40,18 +40,28 @@ function findPincode(data){
       const c = line.charAt(x);
       const currentMove = moves[c];
 
+      console.log("Moving from "+ position + " key (" + currentKey(keys, position) +") going "  + c + " " + currentMove);
+
       if(withinLimits(currentMove, position, keys)){
         position = [position[0]+currentMove[0], position[1]+currentMove[1]];
+        console.log("new position: " +  position + " key is: " + currentKey(keys, position));
       }else{
-        console.log("out of limits");
+        console.log("out of limits, staying on pos", position);
+
       }
-      console.log(position);
+      console.log("_____________");
     }
 
-      result.push("["+keys[position[0]][position[1]] +"]");
+      const resultingKey = currentKey(keys, position);
+      console.log("key: " + resultingKey);
+      result.push("["+resultingKey +"]");
   });
 
   console.log("_____________" +result.toString() +"____________")
+}
+
+function currentKey(keys, position){
+  return keys[position[0]][position[1]];
 }
 
 function withinLimits(move, position, keys){
